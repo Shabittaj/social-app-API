@@ -1,5 +1,6 @@
 package com.learning.server.Service;
 
+import com.learning.server.Model.Content;
 import com.learning.server.Model.User;
 import com.learning.server.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,12 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Override
-    public User registeruser(User user) {
+    public User registeruser(User user) throws Exception {
+        User olduser = userRepository.findByEmail(user.getEmail());
+        if(olduser!=null){
+           throw new Exception("email already exists with emailId: "+user.getEmail());
+        }
+
         return userRepository.save(user);
     }
 
@@ -95,5 +101,11 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user1);
         userRepository.save(user2);
         return user1;
+    }
+
+    @Override
+    public List<Content> savedContent(Integer userId) {
+        List<Content> savedContent = userRepository.findContentByUserId(userId);
+        return savedContent;
     }
 }
