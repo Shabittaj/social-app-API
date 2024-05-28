@@ -33,6 +33,7 @@ public class AuthControllers {
 
     @Autowired
     private UserServiceDetailService userServiceDetailService;
+
     @PostMapping("/signup")
     public AuthResponse registerUser(@RequestBody User user) throws Exception {
         User isExists = userService.findByUserEmail(user.getEmail());
@@ -48,7 +49,9 @@ public class AuthControllers {
         User register=  userRepository.save(newUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(newUser.getEmail(),newUser.getPassword());
+        System.out.println("authentication ========="+authentication);
         String token = JwtProvider.generateToken(authentication);
+        System.out.println("token ========="+token);
         AuthResponse result = new AuthResponse(token,"Registered successfully");
 
         return result;

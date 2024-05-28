@@ -26,4 +26,6 @@ public interface UserService {
 
     public List<Content> savedContent(Integer userId);
 
+    public User findUserByJwt(String jwt) throws Exception;
+
 }

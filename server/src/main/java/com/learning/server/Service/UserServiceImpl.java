@@ -1,5 +1,6 @@
 package com.learning.server.Service;
 
+import com.learning.server.Config.JwtProvider;
 import com.learning.server.Model.Content;
 import com.learning.server.Model.User;
 import com.learning.server.Repository.UserRepository;
@@ -88,8 +89,6 @@ public class UserServiceImpl implements UserService{
         User user1= findByUserId(id1);
         User user2= findByUserId(id2);
 
-//        user1.getFollowings().add(user2.getId());
-//        user2.getFollowers().add(user1.getId());
         if(user1.getFollowings().contains(user2.getId())){
             user1.getFollowings().remove(user2.getId());
             user2.getFollowers().remove(user1.getId());
@@ -107,5 +106,14 @@ public class UserServiceImpl implements UserService{
     public List<Content> savedContent(Integer userId) {
         List<Content> savedContent = userRepository.findContentByUserId(userId);
         return savedContent;
+    }
+
+    @Override
+    public User findUserByJwt(String jwt) throws Exception {
+        String email = JwtProvider.getEmailFromJwtToken(jwt);
+        System.out.println("email-----"+email);
+        User user = findByUserEmail(email);
+        System.out.println("user------------>"+user);
+        return user;
     }
 }
