@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +37,11 @@ public class Content {
     @OneToMany
     private List<User> likePost=new ArrayList<>();
 
-//    @ManyToMany
-    private List<String> commentPost= new ArrayList<>();
+    @OneToMany
+    private List<Comment> commentPost= new ArrayList<>();
+
+    private LocalDateTime createdAt;
+
 
     @Override
     public String toString() {
@@ -49,6 +53,9 @@ public class Content {
                 ", user=" + user +
                 ", likePost=" + likePost +
                 ", commentPost=" + commentPost +
+                ", createdAt=" + createdAt +
                 '}';
     }
+
+
 }

@@ -63,14 +63,6 @@ public class ContentControllers {
         return new ResponseEntity<>(likeContent,HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/{contentId}/comment")
-    public ResponseEntity<Content> commentContent(@PathVariable Integer contentId,@RequestHeader("Authorization")String jwt,@RequestBody String message) throws Exception {
-        User user = userService.findUserByJwt(jwt);
-        Content likeContent = contentService.commmentContent(contentId,user.getId(),message);
-        return new ResponseEntity<>(likeContent,HttpStatus.ACCEPTED);
-    }
-
-
     @PutMapping("/save-content/{contentId}")
     public ResponseEntity<Content> saveContent(@PathVariable Integer contentId,@RequestHeader("Authorization")String jwt) throws Exception {
         User user = userService.findUserByJwt(jwt);

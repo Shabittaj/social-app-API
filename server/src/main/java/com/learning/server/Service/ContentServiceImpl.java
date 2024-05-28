@@ -7,6 +7,7 @@ import com.learning.server.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class ContentServiceImpl implements ContentService {
         createcontent.setImage(content.getImage());
         createcontent.setVideo(content.getVideo());
         createcontent.setUser(user);
+        createcontent.setCreatedAt(LocalDateTime.now());
 
         return contentRepository.save(createcontent);
     }
@@ -84,16 +86,6 @@ public class ContentServiceImpl implements ContentService {
         }else{
             content.getLikePost().add(user);
         }
-
-        return contentRepository.save(content);
-    }
-
-    @Override
-    public Content commmentContent(Integer contentId, Integer userId, String message) throws Exception {
-        User user=userService.findByUserId(userId);
-        Content content= findContentById(contentId);
-        content.getCommentPost().add(user.getId(),message);
-//        content.getCommentPost().add(message);
 
         return contentRepository.save(content);
     }

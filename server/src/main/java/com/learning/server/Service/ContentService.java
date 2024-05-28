@@ -20,8 +20,6 @@ public interface ContentService {
 
     public Content likeContent(Integer contentId,Integer userId) throws Exception;
 
-    public Content commmentContent(Integer contentId,Integer userId,String message) throws Exception;
-
     public Content saveContent(Integer contentId, Integer userId) throws Exception;
 }
 
