@@ -104,16 +104,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<Content> savedContent(Integer userId) {
-        List<Content> savedContent = userRepository.findContentByUserId(userId);
+        Optional<User> user = userRepository.findById(userId);
+        List<Content> savedContent = user.get().getSavedContent();
         return savedContent;
     }
 
     @Override
     public User findUserByJwt(String jwt) throws Exception {
         String email = JwtProvider.getEmailFromJwtToken(jwt);
-        System.out.println("email-----"+email);
+//        System.out.println("email-----"+email);
         User user = findByUserEmail(email);
-        System.out.println("user------------>"+user);
+//        System.out.println("user------------>"+user);
         return user;
     }
 }

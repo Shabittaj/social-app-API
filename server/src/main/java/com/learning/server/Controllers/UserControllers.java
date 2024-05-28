@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
-public class UserControllers extends BaseControllers {
+@RequestMapping("/api/user")
+public class UserControllers  {
 
     @Autowired
     private UserService userService;
@@ -26,13 +26,13 @@ public class UserControllers extends BaseControllers {
     }
 
     @GetMapping("/profile")
-    public User findUserByEmail(@RequestHeader("Authorization") String jwt) throws Exception {
+    public User findUser(@RequestHeader("Authorization") String jwt) throws Exception {
         User user= userService.findUserByJwt(jwt);
         return user;
     }
 
     @GetMapping("/email/{email}")
-    public User findByUserId(@PathVariable("email") String email) throws Exception {
+    public User findUserByEmail(@PathVariable("email") String email) throws Exception {
         return userService.findByUserEmail(email);
     }
 

@@ -4,6 +4,7 @@ import com.learning.server.Model.Content;
 import com.learning.server.Model.User;
 import com.learning.server.Response.ApiResponse;
 import com.learning.server.Service.ContentService;
+import com.learning.server.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,59 +13,68 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/content")
 public class ContentControllers {
 
     @Autowired
     private ContentService contentService;
 
+    @Autowired
+    private UserService userService;
 
-    @PostMapping("/content/{userId}/createContent")
-    public ResponseEntity<Content> createContent(@RequestBody Content content, @PathVariable Integer userId) throws Exception{
-        Content createdContent= contentService.createContent(content,userId);
+    @PostMapping("/create-content")
+    public ResponseEntity<Content> createContent(@RequestBody Content content,@RequestHeader("Authorization")String jwt) throws Exception{
+        User user = userService.findUserByJwt(jwt);
+        Content createdContent= contentService.createContent(content,user.getId());
         return new ResponseEntity<>(createdContent, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/content/{contentId}/delete/{userId}")
-    public ResponseEntity<ApiResponse> deleteContent( @PathVariable Integer contentId,@PathVariable Integer userId) throws Exception {
-        String message = contentService.deleteContent(contentId,userId);
+    @DeleteMapping("/delete-content/{contentId}")
+    public ResponseEntity<ApiResponse> deleteContent( @PathVariable Integer contentId,@RequestHeader("Authorization")String jwt) throws Exception {
+        User user = userService.findUserByJwt(jwt);
+        String message = contentService.deleteContent(contentId,user.getId());
         ApiResponse res = new ApiResponse(message, true);
         return new ResponseEntity<ApiResponse>(res,HttpStatus.OK);
     }
 
-    @GetMapping("/content")
+    @GetMapping("/all-content")
     public ResponseEntity<List<Content>> findAllContentHandler(){
         List<Content> allContent =  contentService.findAllContent();
         return new ResponseEntity<>(allContent,HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/content/user/{userId}")
-    public ResponseEntity<List<Content>> findContentByUserId(@PathVariable Integer userId) throws Exception {
-        List<Content> findContentByUserId = contentService.findContentByUserId(userId);
+    @GetMapping("/user-content")
+    public ResponseEntity<List<Content>> findContentByUserId(@RequestHeader("Authorization")String jwt) throws Exception {
+        User user = userService.findUserByJwt(jwt);
+        List<Content> findContentByUserId = contentService.findContentByUserId(user.getId());
         return new ResponseEntity<>(findContentByUserId, HttpStatus.OK);
     }
 
-    @GetMapping("/content/{contentId}")
+    @GetMapping("/{contentId}")
     public ResponseEntity<Content> findContentBycontentID(@PathVariable Integer contentId) throws Exception {
         Content findContentByContentId =  contentService.findContentById(contentId);
         return new ResponseEntity<>(findContentByContentId, HttpStatus.OK);
     }
 
-    @PutMapping("/content/{contentId}/like/{userId}")
-    public ResponseEntity<Content> likeContent(@PathVariable Integer contentId,@PathVariable Integer userId) throws Exception {
-        Content likeContent = contentService.likeContent(contentId,userId);
+    @PutMapping("/{contentId}/like")
+    public ResponseEntity<Content> likeContent(@PathVariable Integer contentId,@RequestHeader("Authorization")String jwt) throws Exception {
+        User user = userService.findUserByJwt(jwt);
+        Content likeContent = contentService.likeContent(contentId,user.getId());
         return new ResponseEntity<>(likeContent,HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/content/{contentId}/comment/{userId}")
-    public ResponseEntity<Content> commentContent(@PathVariable Integer contentId,@PathVariable Integer userId,@RequestBody String message) throws Exception {
-        Content likeContent = contentService.commmentContent(contentId,userId,message);
+    @PutMapping("/{contentId}/comment")
+    public ResponseEntity<Content> commentContent(@PathVariable Integer contentId,@RequestHeader("Authorization")String jwt,@RequestBody String message) throws Exception {
+        User user = userService.findUserByJwt(jwt);
+        Content likeContent = contentService.commmentContent(contentId,user.getId(),message);
         return new ResponseEntity<>(likeContent,HttpStatus.ACCEPTED);
     }
 
 
-    @PutMapping("/content/save/{contentId}/{userId}")
-    public ResponseEntity<Content> saveContent(@PathVariable Integer contentId,@PathVariable Integer userId) throws Exception {
-        Content saveContent = contentService.saveContent(contentId,userId);
+    @PutMapping("/save-content/{contentId}")
+    public ResponseEntity<Content> saveContent(@PathVariable Integer contentId,@RequestHeader("Authorization")String jwt) throws Exception {
+        User user = userService.findUserByJwt(jwt);
+        Content saveContent = contentService.saveContent(contentId,user.getId());
         return new ResponseEntity<>(saveContent,HttpStatus.OK);
     }
 

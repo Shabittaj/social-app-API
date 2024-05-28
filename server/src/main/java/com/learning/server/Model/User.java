@@ -39,7 +39,6 @@ public class User {
     @ManyToMany
     private List<Content> savedContent = new ArrayList<>();
 
-
     @Override
     public String toString() {
         return "User{" +
@@ -51,9 +50,9 @@ public class User {
                 ", gender='" + gender + '\'' +
                 ", followers=" + followers +
                 ", followings=" + followings +
-                ", savedContent=" + savedContent +
                 '}';
     }
+
 
 
 }
