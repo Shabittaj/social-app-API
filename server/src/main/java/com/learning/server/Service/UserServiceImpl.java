@@ -34,10 +34,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findByUserId(Integer userId) throws Exception {
         Optional<User> user= userRepository.findById(userId);
-        if(user.isPresent()){
-                return user.get();
-        }
+        if(user.isEmpty()){
+
         throw new Exception("user does not exists with userId: "+userId);
+        }
+        User findUser = user.get();
+        findUser.setPassword(null);
+                return findUser;
     }
 
     @Override
